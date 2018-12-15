@@ -4,12 +4,13 @@
             {{name}}'s To Do List
         </h4>
         <div class="container-fluid p-4">
-            <div class="row" v-if="filteredTasks.length == 0">
-                <div class="col text-center">
-                    <b>Nothing to do. Hurrah!</b>
+            
+            <template>
+                <div class="row py-2">
+                    <div class="col-4">
+                        <input v-model="searchItemText" placeholder="Search a Task" class="form-control" />
+                    </div>
                 </div>
-            </div>
-            <template v-else>
                 <div class="row">
                     <div class="col font-weight-bold">Task</div>
                     <div class="col-2 font-weight-bold">Done</div>
@@ -22,9 +23,14 @@
                         {{task.done}}
                     </div>
                 </div>
+                <div class="row" v-if="filteredTasks.length == 0">
+                    <div class="col text-center">
+                        <b>Nothing to do. Hurrah!</b>
+                    </div>
+                </div>
                 <div class="row py-2">
                     <div class="col">
-                        <input v-model="newItemText" class="form-control" />
+                        <input v-model="newItemText" placeholder="Add new Task" class="form-control" />
                     </div>
                     <div class="col-2">
                         <button class="btn btn-primary" v-on:click="addNewTodo" :disabled="newItemText === ''">Add</button>
@@ -57,13 +63,21 @@
                 name: "Shradha",
                 tasks: [],
                 hideCompleted: false,
-                newItemText: ""
+                newItemText: "",
+                searchItemText: ""
             }
         },
 
         computed: {
             filteredTasks() {
-                return this.hideCompleted ? this.tasks.filter(t => !t.done) : this.tasks;
+                if (this.searchItemText !== '' && this.hideCompleted)
+                    return this.tasks.filter(t => t.action.toLowerCase().includes(this.searchItemText.toLowerCase()) && !t.done)
+                else if (this.searchItemText !== '')
+                    return this.tasks.filter(t => t.action.toLowerCase().includes(this.searchItemText.toLowerCase()));
+                else if (this.hideCompleted)
+                    return this.tasks.filter(t => !t.done);
+                else
+                    return this.tasks;
             }
         },
 
