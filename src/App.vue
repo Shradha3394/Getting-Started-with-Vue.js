@@ -58,15 +58,13 @@
 <script>
     export default {
         name: 'app',
-        data() {
-            return {
-                name: "Shradha",
-                tasks: [],
-                hideCompleted: false,
-                newItemText: "",
-                searchItemText: ""
-            }
-        },
+        data: () => ({
+            name: "Shradha",
+            tasks: [],
+            hideCompleted: false,
+            newItemText: "",
+            searchItemText: ""
+        }),
 
         computed: {
             filteredTasks() {
